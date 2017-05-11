@@ -1,0 +1,84 @@
+/*
+Write a program that outputs the string representation of numbers from 1 to n.
+But for multiples of three it should output “Fizz” instead of the number and for the multiples of five output “Buzz”. For numbers which are multiples of both three and five output “FizzBuzz”.
+Example:
+n = 15,
+Return:
+[
+    "1",
+    "2",
+    "Fizz",
+    "4",
+    "Buzz",
+    "Fizz",
+    "7",
+    "8",
+    "Fizz",
+    "Buzz",
+    "11",
+    "Fizz",
+    "13",
+    "14",
+    "FizzBuzz"
+]
+*/
+/**
+ * Return an array of size *returnSize.
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+//本体题意就是说每次遇到三，都输出Fizz，每次遇到5，都输出Buzz。每次遇到3与5的倍数，输出FizzBuzz。
+//11%  6ms
+char** fizzBuzz(int n, int* returnSize) {
+    *returnSize = n;//返回数组的行数
+    int i;
+    char** str;
+    char buf[11];
+    str = (char**)malloc(sizeof(char*)*n);
+    for( i=0; i <n; i++)
+    {
+        if((i+1)%3==0 && (i+1)%5==0 && i)
+            sprintf(buf,"%s","FizzBuzz");//把第三个参数的值复制到第一个参数中
+            //
+        else if((i+1)%3==0)
+            sprintf(buf,"%s","Fizz");
+        else if((i+1)%5==0)
+            sprintf(buf,"%s","Buzz");
+        else
+            sprintf(buf,"%d",i+1);
+        str[i] = malloc(sizeof(buf));
+        
+        memcpy(str[i],buf,strlen(buf)+1);//把第二个内存中的值赋值给第一个参数，赋值范围为第三个参数
+        //memcpy从源地址开始位置，拷贝到第n个位置给目的开始地址
+        
+        memset(buf,"",11);
+        //memset将目的地址开始位置，填充字符ASCII码值，填充数目为第三个参数
+    }
+    return str;
+}
+
+
+/*
+//sprintf用法
+// crt_sprintf.c
+// compile with: /W3
+// This program uses sprintf to format various
+
+//data and place them in the string named buffer.
+// 程序使用sprintf 将各种数据格式化后置于字符数组buffer中
+#include <stdio.h>
+int main( void )
+
+{
+   char  buffer[200], s[] = "computer", c = 'l';
+   int   i = 35, j;
+   float fp = 1.7320534f;
+   // 格式化并打印各种数据到buffer
+   j  = sprintf( buffer,    "   String:    %s\n", s ); // C4996
+   j += sprintf( buffer + j, "   Character: %c\n", c ); // C4996
+   j += sprintf( buffer + j, "   Integer:   %d\n", i ); // C4996
+   j += sprintf( buffer + j, "   Real:      %f\n", fp );// C4996
+
+   printf( "Output:\n%s\ncharacter count = %d\n", buffer, j );
+}
+
+*/
