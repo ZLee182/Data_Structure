@@ -83,7 +83,7 @@ int main()
 
     for( i =0; i<len; i++)
     {
-        Pop(&s,&c);//不明白
+        Pop(&s,&c);
         num = num +(c - 48)*pow(2,i);
     }
     
