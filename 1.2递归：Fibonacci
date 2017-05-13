@@ -1,0 +1,20 @@
+#include<stdio.h>
+int Fibonacci(int n)
+{
+    if( n<3 && n>0 )
+        return 1;
+    else
+    {
+        n = Fibonacci(n-1) + Fibonacci(n-2);
+    }
+}
+
+int main()
+{
+    int n,m;
+    printf("请输入数字n，将显示Fibonacci第n个数：\n");
+
+    scanf("%d",&n);
+    printf("%d\n", Fibonacci(n));
+    return 0;
+}
