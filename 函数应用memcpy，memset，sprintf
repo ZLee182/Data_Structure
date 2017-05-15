@@ -1,4 +1,5 @@
 /*
+用到三个函数的题目：
 Write a program that outputs the string representation of numbers from 1 to n.
 But for multiples of three it should output “Fizz” instead of the number and for the multiples of five output “Buzz”. For numbers which are multiples of both three and five output “FizzBuzz”.
 Example:
@@ -79,6 +80,22 @@ int main( void )
    j += sprintf( buffer + j, "   Real:      %f\n", fp );// C4996
 
    printf( "Output:\n%s\ncharacter count = %d\n", buffer, j );
+}
+
+*/
+/*
+memset用法
+#include<stdio.h>
+#define max 10
+int main()
+{
+    char a[max];
+    //char类型可以填0~255之间的数字。如果是int类型则只能是0或者1
+    memset(a,48,sizeof(char)*max);
+    int i;
+    for( i=0; i<max; i++)
+        printf("%c  ",a[i]);
+    return 0;
 }
 
 */
