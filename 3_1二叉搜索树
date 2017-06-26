@@ -1,0 +1,45 @@
+#include<stdio.h>
+#include<stdlib.h>
+                             
+typedef int data_type;      //声明元素类型
+typedef struct bst_node{    //node节点值
+    data_type data;
+    struct bst_node *lchild,*rchild;
+}bst_t,*bst_p;
+
+bst_p position_insert(bst_p *root,data_type key)        //找到要插入的值的位置
+{
+    bsp_p s,p = *root;
+
+    while(p)
+    {
+        s = p;
+        if(p->data == key)                              //如果这个值本身就存在，返回NULL
+            return NULL;
+        p = (key < p->data) ? p->lchild : p->rchild;    //继续向下查找位置
+    }
+    return s;
+}
+
+bst_p insert_node(bst_p *root, data_type data)          //进行插入操作
+{
+    bst_p s,p = *root;
+
+    s  = malloc(sizeof(struct bst_p));                  //申请一个bst_p的空间
+  
+    s->data = data;                                     //把这个传入的值放进这个新申请的空间里面
+    s->lchild = s->rchild = NULL;
+
+    if(*root==NULL)                                     //如果是一个空树
+        *root = s;
+    else                                    
+    {
+        s = position_insert(*root,data);
+        if(s==NULL)                                     //如果要插入的值本身存在
+        {
+            printf("the element %d exists!\n",data);
+            free(s);
+            return;
+        }
+    }
+}
