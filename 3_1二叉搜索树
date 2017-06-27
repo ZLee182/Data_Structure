@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-                             
+
 typedef int data_type;      //声明元素类型
 typedef struct bst_node{    //node节点值
     data_type data;
@@ -26,13 +26,13 @@ bst_p insert_node(bst_p *root, data_type data)          //进行插入操作
     bst_p s,p = *root;
 
     s  = malloc(sizeof(struct bst_p));                  //申请一个bst_p的空间
-  
+
     s->data = data;                                     //把这个传入的值放进这个新申请的空间里面
     s->lchild = s->rchild = NULL;
 
     if(*root==NULL)                                     //如果是一个空树
         *root = s;
-    else                                    
+    else
     {
         s = position_insert(*root,data);
         if(s==NULL)                                     //如果要插入的值本身存在
@@ -41,5 +41,114 @@ bst_p insert_node(bst_p *root, data_type data)          //进行插入操作
             free(s);
             return;
         }
+    }
+}
+
+bst_p search_node( bst_p *root, data_type data )         //查询数值是否在树中
+{
+    bst_p s;
+    s = *root;
+
+    if(s == NULL)
+        printf("empty tree!\n");
+    while(s)
+    {
+        if(s->data == data)
+            return s;
+        else if(s->data >data)
+            s = s->rchild;
+        else
+            s = s->lchild;
+    }
+    return NULL;
+}
+
+bool delete_node(bst_p *root,data_type data)            //声明一个q节点，q节点是p节点的父节点
+{
+    bst_p q = NULL , p = *root;
+    bool sign = false;
+
+    if(p ==NULL){       //判断是否是空树
+        printf("empty tree !\n nothing to delete");
+        return true;
+    }
+
+    while(p && !sign)   //寻找该节点
+    {
+        if(p->data == data)
+            sign = true;
+
+        else if(p->data > data)
+        {
+            q = p;
+            p = p->rchild;
+        }
+        else
+        {
+            q = p;
+            p = p->lchild;
+        }
+    }
+
+    if(sign == false){      //没找到该节点
+        printf("element don't exists!\n");
+        return true;
+    }
+
+    if( p->lchild == NULL && p->rchild == NULL )    //两个子节点都为空，直接删除
+    {
+        if(p == root)
+            printf("now root is delete!\n");
+        free(s);
+        return true;
+    }
+    else if( !p->rchild || !p->lchild )       //其中一个子节点为空
+    {
+        if( q->lchild == p && p->rchild )
+        {
+            q->lchild = p->rchild;
+            free(p);
+            return true;
+        }
+        else if(q->rchild == p && p->rchild)
+        {
+            q->rchild = p->rchild;
+            free(p);
+            return true;
+        }
+        else if(q->lchild == p && p->lchild)
+        {
+            q->lchild = p->lchild;
+            free(p);
+            return true;
+        }
+        else if(q->rchild ==p && p->lchild)
+        {
+            q->rchild = p->lchild;
+            free(p);
+            return true;
+        }
+    }
+    else//两个字节点都不为空
+    {
+        bst_p s,t = p;//采用前驱方式
+        s = p->lchild;
+        while(s->rchild)
+        {
+            t = s;
+            s = s->rchild;
+        }
+        p->data = s->data;  //节点s的值赋给节点p的值
+        if(t == p)
+        {
+            p->lchild = s->lchild;
+        }
+        else
+        {
+            t->rchild = s->lchild;
+        }
+        free(s);
+        free(t);
+        return true;
     }
 }
