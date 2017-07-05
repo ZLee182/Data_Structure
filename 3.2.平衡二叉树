@@ -4,24 +4,24 @@
 #define TRUE 1
 #define FALSE 0
 
-typedef struct BiTNode				//二叉树生命
-	int data;						//节点值
-	int bf;							//平衡因子balance factor
+typedef struct BiTNode	//二叉树生命
+	int data;	//节点值
+	int bf;		//平衡因子balance factor
 	struct BiTNode *left,*right;	//声明左孩子跟右孩子
 }BiTNode,*BiTree;
 
 
-void R_Rotate(BiTree *p)			//右旋
+void R_Rotate(BiTree *p)	//右旋
 {
-	BiTree L;						//声明一个BiTree变量来储存p的左孩子
-	L = (*p)->left;					
-	(*p)->left = L->right;			//令p的左孩子L的右孩子等于p的左孩子
-	L->right = (*p);				//将p作为其右孩子
-	*p = L;							//将L放到根节点位置
+	BiTree L;	//声明一个BiTree变量来储存p的左孩子
+	L = (*p)->left;	
+	(*p)->left = L->right;	//令p的左孩子L的右孩子等于p的左孩子
+	L->right = (*p);	//将p作为其右孩子
+	*p = L;	//将L放到根节点位置
 }
 
 
-void L_Rotate(BiTree *p)			//左旋
+void L_Rotate(BiTree *p)	//左旋
 {
 	BiTree R;
 	R = (*p)->right;
@@ -31,22 +31,22 @@ void L_Rotate(BiTree *p)			//左旋
 }
 
 
-void LeftBalance(BiTree *T)			//左子数过长
+void LeftBalance(BiTree *T)	//左子数过长
 {
 	BiTree L,Lr;
-	L = (*T)->left;					//令L等于T的左孩子
+	L = (*T)->left;	//令L等于T的左孩子
 	
-	switch(L->bf)					//检查左孩子的平衡因子
+	switch(L->bf)	//检查左孩子的平衡因子
 	{
-		case LH:					//LL型
+		case LH:	//LL型
 			(*T)->bf = L->bf = EH;
 			R_Rotate(&(*T));
 			break;
-		case RH:					//LR型
-			Lr = L->left;
+		case RH:	//LR型
+			Lr = L->left;	//检查T的左孩子的右孩子的平衡因子
 			switch(Lr->bf)
 			{
-				case LH:
+				case LH:	//如果平衡因子为1，而不是0或者-1，即左子树比右子树高一个节点
 					(*T)->bf = RH;
 					L->bf = EH;
 					break;
@@ -60,17 +60,17 @@ void LeftBalance(BiTree *T)			//左子数过长
 			}
 			Lr->bf = EH;
 			L_Rotate(&(*T)->left);				//先左旋
-			R_Rotate(T);			//后右旋
+			R_Rotate(T);						//后右旋
 			break;
 	}
 }
 
-void RightBalance(BiTree *T)		//
+void RightBalance(BiTree *T)//同上
 {
 	BiTree R,Rl;
-	R = (*T)->right;				//
+	R = (*T)->right;				
 
-	switch(R->bf)					//
+	switch(R->bf)					
 	{
 		case RH:			//RR型
 			(*T)->bf = L->bf = EH;
@@ -100,50 +100,50 @@ void RightBalance(BiTree *T)		//
 }
 
 
-BiTree InsertAVL(BiTNode *T, int e, int *taller)
+BiTree InsertAVL(BiTNode *T, int e, int *taller)//二叉树插入操作
 {
-	if(*T == NULL)
+	if(*T == NULL)//如果是一只空树
 	{
-		T = (*BiTree)malloc(sizeof(BiTree));
+		T = (*BiTree)malloc(sizeof(BiTree));//申请空间
 		T->data = e;
 		T->bf = EH;
 		T->left = T->right = NULL;
-		*taller = TRUE;
+		*taller = TRUE;//taller用来标识树是否增加高度
 	}
 	else
 	{
-		if(e == (*T)->data )
+		if(e == (*T)->data )//如果树中本来有这个数
 		{
 			T->bf = EH; 
 			*taller = FALSE;
-			return FALSE;
+			return FALSE;//返回插入失败
 		}
-		else if( e < (*T)->data )
+		else if( e < (*T)->data )//如果小于节点值，则向左子树进行检查
 		{
-			if(!InsertAVL( &(*T)->lchild, e, taller))
+			if(!InsertAVL( &(*T)->lchild, e, taller))//检测是否插入失败
 			{
 				reutrn FALSE;
 			}
-			if(*taller)
+			if(*taller)//如果树的高度加一，检测是否还是平衡，如果不平衡，就进行调整
 			{
-				switch((*T)->data)
+				switch((*T)->bf)//对节点T的平衡因子进行检测
 				{
-					case LH:
-						LeftBalance(T);
-						*taller = FASLE;
+					case LH://左子树高
+						LeftBalance(T);//进行旋转调整
+						*taller = FASLE;//左子树高，原本应该变高，但旋转调整之后高度未增加
 						break;
-					case EH:
-						*taller = TRUE;
+					case EH://两边一样高
+						*taller = TRUE;//高度加一个节点
 						(*T)->bf = LH;
 						break;
-					case RH:
+					case RH://右子树高
 						(*T)->bf = EH;
 						*taller = FALSE;
 						break;				
 				}
 			}
 		}
-		else
+		else//原理同上
 		{
 			if(!InsertAVL( &(*T)->rchild, e, taller))
 			{
