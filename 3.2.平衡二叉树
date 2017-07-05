@@ -72,11 +72,29 @@ void RightBalance(BiTree *T)		//
 
 	switch(R->bf)					//
 	{
-		case LH:			//RL型
-			break;
-		case EH:
-			break;
 		case RH:			//RR型
+			(*T)->bf = L->bf = EH;
+			L_Rotate(&(*T));
+			break;
+		case LH:			//RL型
+			Rl = R->left;
+			switch(Rl->bf)
+			{
+				case LH:
+					(*T)->bf = EH;
+					L->bf = RH;
+					break;
+				case EH:
+					(*T)->bf = L->bf = EH;
+					break;
+				case RH:
+					(*T)->bf = LH;
+					L->right = EH;
+					break;
+			}
+			Rl->bf = EH;
+			R_Rotate(&(*T)->right);
+			L_Rotate(T);
 			break;
 	}
 }
