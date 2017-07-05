@@ -43,7 +43,23 @@ void LeftBalance(BiTree *T)			//左子数过长
 			R_Rotate(&(*T));
 			break;
 		case RH:					//LR型
-			L_Rotate();				//先左旋
+			Lr = L->left;
+			switch(Lr->bf)
+			{
+				case LH:
+					(*T)->bf = RH;
+					L->bf = EH;
+					break;
+				case EH:
+					(*T)->bf = L->bf = EH;
+					break;
+				case RH:
+					(*T)->bf = EH;
+					L->bf = LH;
+					break;
+			}
+			Lr->bf = EH;
+			L_Rotate(&(*T)->left);				//先左旋
 			R_Rotate(T);			//后右旋
 			break;
 	}
