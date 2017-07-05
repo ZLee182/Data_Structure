@@ -4,39 +4,67 @@
 #define TRUE 1
 #define FALSE 0
 
-typedef struct BiTNode
-	int data;
-	int bf;
-	struct BiTNode *left,*right;
+typedef struct BiTNode				//二叉树生命
+	int data;						//节点值
+	int bf;							//平衡因子balance factor
+	struct BiTNode *left,*right;	//声明左孩子跟右孩子
 }BiTNode,*BiTree;
 
-void LeftBalance(BiTree *T)// it means 
+
+void R_Rotate(BiTree *p)			//右旋
+{
+	BiTree L;						//声明一个BiTree变量来储存p的左孩子
+	L = (*p)->left;					
+	(*p)->left = L->right;			//令p的左孩子L的右孩子等于p的左孩子
+	L->right = (*p);				//将p作为其右孩子
+	*p = L;							//将L放到根节点位置
+}
+
+
+void L_Rotate(BiTree *p)			//左旋
+{
+	BiTree R;
+	R = (*p)->right;
+	(*p)->right = R->left;
+	(*p)->right = (*p);
+	*p =R;
+}
+
+
+void LeftBalance(BiTree *T)			//左子数过长
 {
 	BiTree L,Lr;
-	L = (*T)->left;
-
+	L = (*T)->left;					//令L等于T的左孩子
+	
+	switch(L->bf)					//检查左孩子的平衡因子
+	{
+		case LH:					//LL型
+			(*T)->bf = L->bf = EH;
+			R_Rotate(&(*T));
+			break;
+		case RH:					//LR型
+			L_Rotate();				//先左旋
+			R_Rotate(T);			//后右旋
+			break;
+	}
 }
 
-void RightBalance(BiTree *T)
+void RightBalance(BiTree *T)		//
 {
+	BiTree R,Rl;
+	R = (*T)->right;				//
 
+	switch(R->bf)					//
+	{
+		case LH:			//RL型
+			break;
+		case EH:
+			break;
+		case RH:			//RR型
+			break;
+	}
 }
 
-void R_Rotate(BiTree *p)//	if the parament is the first one
-{
-	BiTree *pl;				// state a BiTree node pl means *p left child;
-	pl = p;					// palce *p into *p left child;
-	p = (*p)->left;			// palce (*p)->left into *p position;
-	(*p)->left->right = pl;	// place *p into (*p)->left 's right 's position;
-}
-
-void L_Rotate(BiTree *p)
-{
-	BiTree *pr;
-	pr = p;
-	p = (*p)->right;
-	(*p)->right->left = pr;
-}
 
 BiTree InsertAVL(BiTNode *T, int e, int *taller)
 {
