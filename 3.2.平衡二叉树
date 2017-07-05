@@ -1,0 +1,110 @@
+#define LH 1
+#define EH 0
+#define LH -1
+#define TRUE 1
+#define FALSE 0
+
+typedef struct BiTNode
+	int data;
+	int bf;
+	struct BiTNode *left,*right;
+}BiTNode,*BiTree;
+
+void LeftBalance(BiTree *T)// it means 
+{
+	BiTree L,Lr;
+	L = (*T)->left;
+
+}
+
+void RightBalance(BiTree *T)
+{
+
+}
+
+void R_Rotate(BiTree *p)//	if the parament is the first one
+{
+	BiTree *pl;				// state a BiTree node pl means *p left child;
+	pl = p;					// palce *p into *p left child;
+	p = (*p)->left;			// palce (*p)->left into *p position;
+	(*p)->left->right = pl;	// place *p into (*p)->left 's right 's position;
+}
+
+void L_Rotate(BiTree *p)
+{
+	BiTree *pr;
+	pr = p;
+	p = (*p)->right;
+	(*p)->right->left = pr;
+}
+
+BiTree InsertAVL(BiTNode *T, int e, int *taller)
+{
+	if(*T == NULL)
+	{
+		T = (*BiTree)malloc(sizeof(BiTree));
+		T->data = e;
+		T->bf = EH;
+		T->left = T->right = NULL;
+		*taller = TRUE;
+	}
+	else
+	{
+		if(e == (*T)->data )
+		{
+			T->bf = EH; 
+			*taller = FALSE;
+			return FALSE;
+		}
+		else if( e < (*T)->data )
+		{
+			if(!InsertAVL( &(*T)->lchild, e, taller))
+			{
+				reutrn FALSE;
+			}
+			if(*taller)
+			{
+				switch((*T)->data)
+				{
+					case LH:
+						LeftBalance(T);
+						*taller = FASLE;
+						break;
+					case EH:
+						*taller = TRUE;
+						(*T)->bf = LH;
+						break;
+					case RH:
+						(*T)->bf = EH;
+						*taller = FALSE;
+						break;				
+				}
+			}
+		}
+		else
+		{
+			if(!InsertAVL( &(*T)->rchild, e, taller))
+			{
+				reutrn FALSE;
+			}
+			if(*taller)
+			{
+				switch((*T)->data)
+				{
+					case LH:
+						(*T)->bf = EH;
+						*taller = FASLE;
+						break;
+					case EH:
+						*taller = TRUE;
+						(*T)->bf = RH;
+						break;
+					case RH:
+						RightBalance(T);
+						*taller = FALSE;
+						break;
+				}
+			}
+		}
+	}
+}
