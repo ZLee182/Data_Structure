@@ -12,8 +12,11 @@ void InsertSort()
 	for( i =  2; i < n ; i++ )
 	{
 		a[0] = a[i];
-		for(j =i-1; a[0]<a[j]; --j )
-			a[j+1] = a[j];
+		if(a[0]<a[i])
+		{
+			for(j =i-1; a[0]<a[j]; --j )
+				a[j+1] = a[j];
+		}
 		a[j+1] = a[0];
 	}
 	
